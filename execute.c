@@ -1,42 +1,37 @@
 #include "shell.h"
 
 /**
- * execute_command - exec input command
- * @line: line contians the command
+ * execute_command - fork and executes command
+ * @line: command line
+ * @progname: name of the shell program for error massages
  *
- * Return: void
+ * Return: 0 on success, -1 on error
  */
-void execute_command(char *line)
+int execute_command(char *line, char *progname)
 {
 	pid_t pid;
 	int status;
 	char *argv[2];
-
-	line[strcspn(line, "\n")] = '\0';
-	
-	if (line[0] == '\0')
-		return;
-
 	pid = fork();
 	if (pid == -1)
 	{
-		perror("fork");
-		return;
+		perror(progname);
+		return (-1);
 	}
 	if (pid == 0)
 	{
 		argv[0] = line;
 		argv[1] = NULL;
 
-		if (execve(argv[0], argv, NULL) == -1)
+		if (execve(line, argv, environ) == -1)
 		{
-			perror("execve");
-			exit(EXIT_FAILURE);
+			perror(progname);
+			_exit(127);
 		}
 	}
 	else
 	{
-		waitpid(pid, &status, 0);
-		(void)status;
+		wait(&status);
 	}
+	return (0);
 }

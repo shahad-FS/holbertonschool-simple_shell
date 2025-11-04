@@ -12,6 +12,6 @@ extern char **environ;
 
 void print_prompt(void);
 char *read_line(void);
-void execute_command(char *line);
+int execute_command(char *line, char *progname);
 
 #endif

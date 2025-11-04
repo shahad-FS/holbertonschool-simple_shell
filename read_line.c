@@ -17,5 +17,9 @@ char *read_line(void)
 		free(line);
 		return (NULL);
 	}
+
+	if (line[read - 1] == '\n')
+		line[read - 1] = '\0';
+
 	return (line);
 }

@@ -7,21 +7,27 @@
  *
  * Return: always 0
  */
-int main(void)
+int main(int argc, char **argv)
 {
 	char *line;
+	int interactive = isatty(STDIN_FILENO);
+
+	(void)argc;
 
 	while (1)
 	{
-		print_prompt();
+		if (interactive)
+			print_prompt();
+
 		line = read_line();
 		if (line == NULL)
 		{
-			if (isatty(STDIN_FILENO))
+			if (interactive)
 				write(STDOUT_FILENO, "\n", 1);
 			break;
 		}
-		execute_command(line);
+		if (line[0] != '\0')
+			execute_command(line, argv[0]);
 		free(line);
 	}
 	return (0);
