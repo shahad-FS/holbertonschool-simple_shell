@@ -12,18 +12,22 @@ int execute_command(char *line, char *progname)
 	pid_t pid;
 	int status;
 	char *argv[2];
+
+	if (line == NULL || strlen(line) == 0)
+		return (1);
+	
+	argv[0] = line;
+	argv[1] = NULL;
+
 	pid = fork();
 	if (pid == -1)
 	{
 		perror(progname);
-		return (-1);
+		return (1);
 	}
 	if (pid == 0)
 	{
-		argv[0] = line;
-		argv[1] = NULL;
-
-		if (execve(line, argv, environ) == -1)
+		if (execve(argv[0], argv, environ) == -1)
 		{
 			perror(progname);
 			_exit(127);

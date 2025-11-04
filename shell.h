@@ -12,6 +12,7 @@ extern char **environ;
 
 void print_prompt(void);
 char *read_line(void);
+char *trim_space(char *str);
 int execute_command(char *line, char *progname);
 
 #endif

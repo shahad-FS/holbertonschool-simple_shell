@@ -9,7 +9,7 @@
  */
 int main(int argc, char **argv)
 {
-	char *line;
+	char *orig, *line;
 	int interactive = isatty(STDIN_FILENO);
 
 	(void)argc;
@@ -19,16 +19,17 @@ int main(int argc, char **argv)
 		if (interactive)
 			print_prompt();
 
-		line = read_line();
-		if (line == NULL)
+		orig = read_line();
+		if (orig == NULL)
 		{
 			if (interactive)
 				write(STDOUT_FILENO, "\n", 1);
 			break;
 		}
+		line = trim_space(orig);
 		if (line[0] != '\0')
 			execute_command(line, argv[0]);
-		free(line);
+		free(orig);
 	}
 	return (0);
 }
