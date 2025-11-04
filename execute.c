@@ -11,13 +11,24 @@ int execute_command(char *line, char *progname)
 {
 	pid_t pid;
 	int status;
-	char *argv[2];
-
-	if (line == NULL || strlen(line) == 0)
-		return (1);
+	char *argv[64];
+	char *token;
+	char path[256];
+	int i = 0;
 	
-	argv[0] = line;
-	argv[1] = NULL;
+	if (!line || !*line)
+		return (0);
+	token = strtok(line, " \t\n");
+	
+	while (token != NULL && i < 63)
+	{
+		argv[i++] = token;
+		token = strtok(NULL, " \t\n");
+	}
+	argv[i] = NULL;
+	
+	if (argv[0] == NULL)
+		return (0);
 
 	pid = fork();
 	if (pid == -1)
@@ -27,11 +38,17 @@ int execute_command(char *line, char *progname)
 	}
 	if (pid == 0)
 	{
-		if (execve(argv[0], argv, environ) == -1)
+		if (argv[0][0] == '/' || argv[0][0] == '.')
 		{
-			perror(progname);
-			_exit(127);
+			execve(argv[0], argv, environ);
 		}
+		else
+		{
+			snprintf(path, sizeof(path), "/bin/%s", argv[0]);
+			execve(path, argv, environ);
+		}
+		perror(progname);
+		_exit(127);
 	}
 	else
 	{
