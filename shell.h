@@ -14,5 +14,6 @@ void print_prompt(void);
 char *read_line(void);
 char *trim_space(char *str);
 int execute_command(char *line, char *progname);
+int parse_arguments(char *line, char **argv);
 
 #endif
