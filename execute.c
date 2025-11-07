@@ -1,5 +1,22 @@
 #include "shell.h"
-#include <sys/stat.h>
+
+/**
+ * _getenv - custom getenv implementation using environ
+ * @name: name of the environment variable
+ * Return: pointer to its value or NULL if not found
+ */
+char *_getenv(const char *name)
+{
+	int i;
+	size_t len = strlen(name);
+
+	for (i = 0; environ[i]; i++)
+	{
+		if (strncmp(environ[i], name, len) == 0 && environ[i][len] == '=')
+			return (environ[i] + len + 1);
+	}
+	return (NULL);
+}
 
 /**
  * parse_arguments - tokenize command line into argv array
@@ -25,21 +42,15 @@ int parse_arguments(char *line, char **argv)
 }
 
 /**
- * execute_command - fork and execute a command
- * @line: command line
- * @progname: shell program name (for error messages)
- *
- * Return: 0 on success, 1 on error, 127 if command not found
+ * execute_command - main execution logic (delegates to helpers)
+ * @line: input line
+ * @progname: shell name
+ * Return: 0 on success, 127 if not found
  */
 int execute_command(char *line, char *progname)
 {
-	pid_t pid;
-	int status;
 	char *argv[64];
 	int argc;
-	char *path_env, *path_copy, *dir, full_path[256];
-	struct stat st;
-	int found = 0;
 
 	if (!line || !*line)
 		return (0);
@@ -48,70 +59,8 @@ int execute_command(char *line, char *progname)
 	if (argc == 0)
 		return (0);
 
-	/* Handle commands with / or ./ */
 	if (argv[0][0] == '/' || argv[0][0] == '.')
-	{
-		if (access(argv[0], X_OK) != 0)
-		{
-			fprintf(stderr, "%s: 1: %s: not found\n", progname, argv[0]);
-			return (127);
-		}
-		found = 1;
-	}
-	else
-	{
-		/* Search command in PATH */
-		path_env = getenv("PATH");
-		if (!path_env || !*path_env)
-		{
-			fprintf(stderr, "%s: 1: %s: not found\n", progname, argv[0]);
-			return (127);
-		}
+		return (try_direct_command(argv, progname));
 
-		path_copy = strdup(path_env);
-		if (!path_copy)
-			return (1);
-
-		dir = strtok(path_copy, ":");
-		while (dir)
-		{
-			snprintf(full_path, sizeof(full_path), "%s/%s", dir, argv[0]);
-			if (stat(full_path, &st) == 0 && (st.st_mode & S_IXUSR))
-			{
-				found = 1;
-				break;
-			}
-			dir = strtok(NULL, ":");
-		}
-		free(path_copy);
-
-		if (!found)
-		{
-			fprintf(stderr, "%s: 1: %s: not found\n", progname, argv[0]);
-			return (127);
-		}
-	}
-
-	/* Fork only if command exists */
-	pid = fork();
-	if (pid == -1)
-	{
-		perror(progname);
-		return (1);
-	}
-
-	if (pid == 0)
-	{
-		if (argv[0][0] == '/' || argv[0][0] == '.')
-			execve(argv[0], argv, environ);
-		else
-			execve(full_path, argv, environ);
-
-		perror(progname);
-		_exit(127);
-	}
-	else
-		wait(&status);
-
-	return (0);
+	return (try_path_command(argv, progname));
 }
