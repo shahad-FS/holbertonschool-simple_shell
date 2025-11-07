@@ -15,18 +15,18 @@ int execute_command(char *line, char *progname)
 	char *token;
 	char path[256];
 	int i = 0;
-	
+
 	if (!line || !*line)
 		return (0);
 	token = strtok(line, " \t\n");
-	
+
 	while (token != NULL && i < 63)
 	{
 		argv[i++] = token;
 		token = strtok(NULL, " \t\n");
 	}
 	argv[i] = NULL;
-	
+
 	if (argv[0] == NULL)
 		return (0);
 
