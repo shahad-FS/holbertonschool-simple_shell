@@ -1,25 +1,18 @@
 #include "shell.h"
 
 /**
- * execute_command - fork and executes command
- * @line: command line
- * @progname: name of the shell program for error massages
+ * parse_arguments - tokenize command line into argv array
+ * @line: input command line
+ * @argv: array to store arguments
  *
- * Return: 0 on success, -1 on error
+ * Return: number of arguments
  */
-int execute_command(char *line, char *progname)
+int parse_arguments(char *line, char **argv)
 {
-	pid_t pid;
-	int status;
-	char *argv[64];
 	char *token;
-	char path[256];
 	int i = 0;
 
-	if (!line || !*line)
-		return (0);
 	token = strtok(line, " \t\n");
-
 	while (token != NULL && i < 63)
 	{
 		argv[i++] = token;
@@ -27,7 +20,29 @@ int execute_command(char *line, char *progname)
 	}
 	argv[i] = NULL;
 
-	if (argv[0] == NULL)
+	return (i);
+}
+
+/**
+ * execute_command - fork and execute a command
+ * @line: command line
+ * @progname: shell program name (for error messages)
+ *
+ * Return: 0 on success, 1 on error
+ */
+int execute_command(char *line, char *progname)
+{
+	pid_t pid;
+	int status;
+	char *argv[64];
+	char path[256];
+	int argc;
+
+	if (!line || !*line)
+		return (0);
+
+	argc = parse_arguments(line, argv);
+	if (argc == 0)
 		return (0);
 
 	pid = fork();
@@ -39,9 +54,7 @@ int execute_command(char *line, char *progname)
 	if (pid == 0)
 	{
 		if (argv[0][0] == '/' || argv[0][0] == '.')
-		{
 			execve(argv[0], argv, environ);
-		}
 		else
 		{
 			snprintf(path, sizeof(path), "/bin/%s", argv[0]);
@@ -51,8 +64,8 @@ int execute_command(char *line, char *progname)
 		_exit(127);
 	}
 	else
-	{
 		wait(&status);
-	}
+
 	return (0);
 }
+
