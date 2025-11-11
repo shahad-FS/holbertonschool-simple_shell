@@ -1,0 +1,22 @@
+```troff
+.TH SIMPLE_SHELL 1 "2025-11-11" "v1.0" "Simple Shell Manual"
+.SH NAME
+simple_shell \- a simple command line interpreter
+.SH SYNOPSIS
+.B ./hsh
+.SH DESCRIPTION
+simple_shell is a minimal UNIX shell written in C. It can execute commands with absolute or relative paths, search for commands in the PATH, and supports built-in commands such as env and exit.
+.SH USAGE
+Run the shell:
+
+$ ./hsh
+
+Then type commands:
+
+$ ls -l
+$ env
+$ /bin/ls
+$ exit
+.SH AUTHORS
+Shahad Alsaneea
+Rahaf Alhareti
