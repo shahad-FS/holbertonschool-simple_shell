@@ -59,6 +59,12 @@ int execute_command(char *line, char *progname)
 	if (argc == 0)
 		return (0);
 
+	if (strcmp(argv[0], "env") == 0)
+	{
+		print_env();
+		return (0);
+	}
+
 	if (argv[0][0] == '/' || argv[0][0] == '.')
 		return (try_direct_command(argv, progname));
 	

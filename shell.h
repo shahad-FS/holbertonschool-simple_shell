@@ -13,7 +13,7 @@ extern char **environ;
 char *_getenv(const char *name);
 int parse_arguments(char *line, char **argv);
 int execute_command(char *line, char *progname);
-
+void print_env(void);
 /* Helpers */
 int try_direct_command(char **argv, char *progname);
 int try_path_command(char **argv, char *progname);
