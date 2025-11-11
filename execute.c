@@ -51,6 +51,8 @@ int execute_command(char *line, char *progname)
 {
 	char *argv[64];
 	int argc;
+	char *path_env;
+	int status = 0;
 
 	if (!line || !*line)
 		return (0);
@@ -61,6 +63,14 @@ int execute_command(char *line, char *progname)
 
 	if (argv[0][0] == '/' || argv[0][0] == '.')
 		return (try_direct_command(argv, progname));
+	
+	path_env = _getenv("PATH");
 
-	return (try_path_command(argv, progname));
+	if (path_env == NULL || *path_env == '\0')
+	{
+		fprintf(stderr, "%s: 1: %s: not found\n", progname, argv[0]);
+		return (127);
+	}
+	status = try_path_command(argv, progname);
+	return (status);
 }
