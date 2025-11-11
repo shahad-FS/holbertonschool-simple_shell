@@ -19,8 +19,9 @@ It supports interactive mode and basic parsing of arguments.
 - 💻 Interactive prompt display.
 
 
-### Authors:
 ---
+
+### Authors:
 Shahad Alsaneea.
 
 Rahaf Alhareti.
