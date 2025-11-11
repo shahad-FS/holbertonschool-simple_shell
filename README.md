@@ -18,7 +18,9 @@ It supports interactive mode and basic parsing of arguments.
 - 🧹 Handle extra spaces and tabs in the input.
 - 💻 Interactive prompt display.
 
-### Authors:
 
+### Authors:
+---
 Shahad Alsaneea.
+
 Rahaf Alhareti.
