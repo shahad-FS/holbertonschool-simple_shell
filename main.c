@@ -11,6 +11,7 @@ int main(int argc, char **argv)
 {
 	char *orig, *line;
 	int interactive = isatty(STDIN_FILENO);
+	int status = 0;
 
 	(void)argc;
 
@@ -28,8 +29,15 @@ int main(int argc, char **argv)
 		}
 		line = trim_space(orig);
 		if (line[0] != '\0')
-			execute_command(line, argv[0]);
+		{
+			if (strcmp(line, "exit") == 0)
+			{
+				free(orig);
+				break;
+			}
+			status = execute_command(line, argv[0]);
+		}
 		free(orig);
 	}
-	return (0);
+	return (status);
 }

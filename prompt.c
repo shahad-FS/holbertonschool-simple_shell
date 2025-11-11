@@ -6,7 +6,7 @@
  */
 void print_prompt(void)
 {
-	const char *prompt = "$";
+	const char *prompt = "$ ";
 
 	write(STDOUT_FILENO, prompt, strlen(prompt));
 }
