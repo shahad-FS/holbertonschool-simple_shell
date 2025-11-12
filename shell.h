@@ -21,6 +21,8 @@ int _strlen(const char *s);
 int _strcmp(const char *s1, const char *s2);
 void handle_sigint(int sig);
 int builtin_cd(char **argv);
+int builtin_setenv(char **args);
+int builtin_unsetenv(char **args);
 /* Other functions used in main */
 void print_prompt(void);
 char *read_line(void);

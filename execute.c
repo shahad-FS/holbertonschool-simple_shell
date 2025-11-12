@@ -70,6 +70,15 @@ int execute_command(char *line, char *progname)
 		return (builtin_cd(argv));
 	}
 
+	if (strcmp(argv[0], "setenv") == 0)
+	{
+		return (builtin_setenv(argv));
+	}
+	if (strcmp(argv[0], "unsetenv") == 0)
+	{
+		return (builtin_unsetenv(argv));
+	}
+
 	if (argv[0][0] == '/' || argv[0][0] == '.')
 		return (try_direct_command(argv, progname));
 	
