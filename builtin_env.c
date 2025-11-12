@@ -72,7 +72,6 @@ int _unsetenv(const char *var)
             return (0);
         }
     }
-    write(1, "OK\n", 3);
     return (0);
 }
 
@@ -95,6 +94,7 @@ int builtin_setenv(char **args)
         write(2, "setenv: failed\n", 15);
         return (1);
     }
+    write(1, "OK\n", 3);
     return (0);
 }
 
@@ -118,6 +118,6 @@ int builtin_unsetenv(char **args)
         write(2, "unsetenv: failed\n", 17);
         return (1);
     }
-
+    write(1, "OK\n", 3);
     return (0);
 }
