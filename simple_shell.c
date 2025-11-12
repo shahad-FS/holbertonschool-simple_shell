@@ -11,7 +11,7 @@ int main(void)
     char **args;
     pid_t pid;
     int status;
-
+    int i;
     while (1)
     {
         printf("$ ");
@@ -46,7 +46,7 @@ int main(void)
         }
 
         free(line);
-        for (int i = 0; args[i]; i++)
+        for (i = 0; args[i]; i++)
             free(args[i]);
         free(args);
     }

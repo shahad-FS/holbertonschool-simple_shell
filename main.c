@@ -15,6 +15,8 @@ int main(int argc, char **argv)
 
 	(void)argc;
 
+	signal(SIGINT, handle_sigint);
+
 	while (1)
 	{
 		if (interactive)

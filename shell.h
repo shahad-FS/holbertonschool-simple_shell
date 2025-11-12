@@ -19,7 +19,7 @@ int try_direct_command(char **argv, char *progname);
 int try_path_command(char **argv, char *progname);
 int _strlen(const char *s);
 int _strcmp(const char *s1, const char *s2);
-
+void handle_sigint(int sig);
 /* Other functions used in main */
 void print_prompt(void);
 char *read_line(void);
