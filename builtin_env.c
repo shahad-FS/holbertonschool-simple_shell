@@ -72,6 +72,7 @@ int _unsetenv(const char *var)
             return (0);
         }
     }
+    write(1, "OK\n", 3);
     return (0);
 }
 
