@@ -65,6 +65,11 @@ int execute_command(char *line, char *progname)
 		return (0);
 	}
 
+	if (strcmp(argv[0], "cd") == 0)
+	{
+		return (builtin_cd(argv));
+	}
+
 	if (argv[0][0] == '/' || argv[0][0] == '.')
 		return (try_direct_command(argv, progname));
 	
