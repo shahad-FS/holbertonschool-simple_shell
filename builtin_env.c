@@ -25,12 +25,13 @@ int _setenv(const char *var, const char *value)
 		return (-1);
 	}
 
-	snprintf(new_var, len + strlen(value) + 2, "%s=%s", var, value);
+	sprintf(new_var, "%s=%s", var, value);
 
 	for (i = 0; environ[i]; i++)
 	{
 		if (strncmp(environ[i], var, len) == 0 && environ[i][len] == '=')
 		{
+			free(environ[i]);
 			environ[i] = new_var;
 			return (0);
 		}
@@ -112,7 +113,7 @@ int builtin_unsetenv(char **args)
 {
 	if (!args[1])
 	{
-		write(2, "Usage: unsetenv VARIABLE\n", 25);
+		write(2, "Usage: unsetenv VARIABLE\n", 26);
 		return (1);
 	}
 	if (_unsetenv(args[1]) == -1)
