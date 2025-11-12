@@ -23,6 +23,7 @@ void handle_sigint(int sig);
 int builtin_cd(char **argv);
 int builtin_setenv(char **args);
 int builtin_unsetenv(char **args);
+int _help(char **args);
 /* Other functions used in main */
 void print_prompt(void);
 char *read_line(void);

@@ -73,7 +73,11 @@ int execute_command(char *line, char *progname)
 	{
 		return (builtin_unsetenv(argv));
 	}
-
+	
+	if (strcmp(argv[0], "help") == 0)
+	{
+		return (_help(argv));
+	}
 	if (argv[0][0] == '/' || argv[0][0] == '.')
 		return (try_direct_command(argv, progname));
 	
