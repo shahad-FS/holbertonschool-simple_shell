@@ -6,7 +6,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <sys/wait.h>
-
+#include <fcntl.h>
 extern char **environ;
 
 /* Core functions */
@@ -24,6 +24,7 @@ int builtin_cd(char **argv);
 int builtin_setenv(char **args);
 int builtin_unsetenv(char **args);
 int _help(char **args);
+void process_file(char *filename, char *progname);
 /* Other functions used in main */
 void print_prompt(void);
 char *read_line(void);
