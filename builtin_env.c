@@ -28,7 +28,6 @@ int _setenv(const char *var, const char *value)
     {
         if (strncmp(environ[i], var, len) == 0 && environ[i][len] == '=')
         {
-            free(environ[i]);
             environ[i] = new_var;
             return (0);
         }
