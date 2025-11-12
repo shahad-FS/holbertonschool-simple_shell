@@ -31,10 +31,6 @@ int _setenv(const char *var, const char *value)
 	{
 		if (strncmp(environ[i], var, len) == 0 && environ[i][len] == '=')
 		{
-			if (environ[i][len + 1] != '\0')
-			{
-				free(environ[i]);
-			}
 			environ[i] = new_var;
 			return (0);
 		}
@@ -75,6 +71,7 @@ int _unsetenv(const char *var)
 		if (strncmp(environ[i], var, len) == 0 && environ[i][len] == '=')
 		{
 			free(environ[i]);
+
 			for (j = i; environ[j]; j++)
 				environ[j] = environ[j + 1];
 			return (0);
