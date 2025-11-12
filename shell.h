@@ -17,6 +17,8 @@ void print_env(void);
 /* Helpers */
 int try_direct_command(char **argv, char *progname);
 int try_path_command(char **argv, char *progname);
+int _strlen(const char *s);
+int _strcmp(const char *s1, const char *s2);
 
 /* Other functions used in main */
 void print_prompt(void);

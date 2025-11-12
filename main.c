@@ -30,7 +30,7 @@ int main(int argc, char **argv)
 		line = trim_space(orig);
 		if (line[0] != '\0')
 		{
-			if (strcmp(line, "exit") == 0)
+			if (_strcmp(line, "exit") == 0)
 			{
 				free(orig);
 				break;
