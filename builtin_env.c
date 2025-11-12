@@ -12,6 +12,7 @@ int _setenv(const char *var, const char *value)
     int i;
     size_t len;
     char *new_var;
+    char **new_environ;
 
     if (!var || !value)
         return (-1);
@@ -32,7 +33,7 @@ int _setenv(const char *var, const char *value)
             return (0);
         }
     }
-    har **new_environ = realloc(environ, sizeof(char *) * (i + 2));
+    new_environ = realloc(environ, sizeof(char *) * (i + 2));
     if (!new_environ)
     {
         free(new_var);
