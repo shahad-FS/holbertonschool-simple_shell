@@ -1,67 +1,71 @@
 #include <unistd.h>
 #include <stdlib.h>
-#include <errno.h>
+#include <stdio.h>
 
-#ifndef BUFFER_SIZE
 #define BUFFER_SIZE 1024
-#endif
 
-ssize_t _getline(char **lineptr, size_t *n)
+/**
+ * _getline - Custom implementation of getline()
+ * Reads a line from standard input using read() system call
+ * @lineptr: Pointer to the buffer that will store the line
+ *
+ * Return: Number of characters read (excluding null terminator),
+ * or -1 on failure or EOF.
+ */
+ssize_t _getline(char **lineptr)
 {
-    static char buf[BUFFER_SIZE];
+    static char buffer[BUFFER_SIZE];
     static ssize_t buf_pos = 0;
-    static ssize_t buf_len = 0;
-    ssize_t total_read = 0;
-    char *dst;
-    size_t dst_size;
+    static ssize_t buf_size = 0;
+    ssize_t i = 0;
+    char *line = NULL;
+    char c;
 
-    if (!lineptr || !n)
-    {
-        errno = EINVAL;
+    if (!lineptr)
         return -1;
-    }
 
-    if (*lineptr == NULL || *n == 0)
-    {
-        *n = 128;
-        *lineptr = malloc(*n);
-        if (*lineptr == NULL)
-            return -1;
-    }
-
-    dst = *lineptr;
-    dst_size = *n;
+    line = malloc(BUFFER_SIZE);
+    if (!line)
+        return -1;
 
     while (1)
     {
-        if (buf_pos >= buf_len)
+        /* If buffer is empty, read a new chunk from stdin */
+        if (buf_pos >= buf_size)
         {
-            buf_len = read(STDIN_FILENO, buf, BUFFER_SIZE);
+            buf_size = read(STDIN_FILENO, buffer, BUFFER_SIZE);
             buf_pos = 0;
 
-            if (buf_len <= 0)
-                return (total_read > 0) ? total_read : -1;
+            if (buf_size <= 0)
+            {
+                free(line);
+                return -1; /* EOF or read error */
+            }
         }
 
-        while (buf_pos < buf_len)
-        {
-            char c = buf[buf_pos++];
-            if ((size_t)(total_read + 1) >= dst_size)
-            {
-                dst_size *= 2;
-                dst = realloc(dst, dst_size);
-                if (!dst)
-                    return -1;
-                *lineptr = dst;
-                *n = dst_size;
-            }
+        /* Get the next character from the buffer */
+        c = buffer[buf_pos++];
 
-            dst[total_read++] = c;
-            if (c == '\n')
+        /* Stop reading at newline or end of input */
+        if (c == '\n' || c == '\0')
+        {
+            line[i] = '\0';
+            *lineptr = line;
+            return i;
+        }
+
+        line[i++] = c;
+
+        /* If line is getting too big, reallocate more memory */
+        if (i >= BUFFER_SIZE - 1)
+        {
+            char *new_line = realloc(line, i + BUFFER_SIZE);
+            if (!new_line)
             {
-                dst[total_read] = '\0';
-                return total_read;
+                free(line);
+                return -1;
             }
+            line = new_line;
         }
     }
 }
