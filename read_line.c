@@ -11,14 +11,14 @@ char *read_line(void)
 	size_t len = 0;
 	ssize_t read;
 
-	read = getline(&line, &len, stdin);
+	read = _getline(&line, &len);
 	if (read == -1)
 	{
 		free(line);
 		return (NULL);
 	}
 
-	if (line[read - 1] == '\n')
+	if (read > 0 && line[read - 1] == '\n')
 		line[read - 1] = '\0';
 
 	return (line);

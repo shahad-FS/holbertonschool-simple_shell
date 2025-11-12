@@ -22,5 +22,6 @@ int try_path_command(char **argv, char *progname);
 void print_prompt(void);
 char *read_line(void);
 char *trim_space(char *str);
+ssize_t _getline(char **lineptr, size_t *n);
 
 #endif /* SHELL_H */
