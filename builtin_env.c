@@ -9,45 +9,41 @@
  */
 int _setenv(const char *var, const char *value)
 {
-	int i;
-	size_t len;
-	char *new_var;
-	char **new_environ;
-	if (!var || !value)
-	{
-		return (-1);
-	}
-	len = strlen(var);
-	new_var = malloc(len + strlen(value) + 2);
+    int i;
+    size_t len;
+    char *new_var;
 
-	if (!new_var)
-	{
-		return (-1);
-	}
+    if (!var || !value)
+        return (-1);
 
-	sprintf(new_var, "%s=%s", var, value);
+    len = strlen(var);
+    new_var = malloc(len + strlen(value) + 2);
+    if (!new_var)
+        return (-1);
 
-	for (i = 0; environ[i]; i++)
-	{
-		if (strncmp(environ[i], var, len) == 0 && environ[i][len] == '=')
-		{
-			free(environ[i]);
-			environ[i] = new_var;
-			return (0);
-		}
-	}
-	
-	new_environ = realloc(environ, sizeof(char *) * (i + 2));
-	
-	if (!new_environ)
-	{
-		free(new_var);
-		return (-1);
-	}
-	environ = new_environ;
-	environ[i] = new_var;
-	environ[i + 1] = NULL;
-	return (0);
+    sprintf(new_var, "%s=%s", var, value);
+
+    for (i = 0; environ[i]; i++)
+    {
+        if (strncmp(environ[i], var, len) == 0 && environ[i][len] == '=')
+        {
+            free(environ[i]);
+            environ[i] = new_var;
+            return (0);
+        }
+    }
+    har **new_environ = realloc(environ, sizeof(char *) * (i + 2));
+    if (!new_environ)
+    {
+        free(new_var);
+        return (-1);
+    }
+
+    environ = new_environ;
+    environ[i] = new_var;
+    environ[i + 1] = NULL;
+
+    return (0);
 }
 
 /**
@@ -58,27 +54,25 @@ int _setenv(const char *var, const char *value)
  */
 int _unsetenv(const char *var)
 {
-	int i, j;
-	size_t len;
+    int i, j;
+    size_t len;
 
-	if (!var)
-	{
-		return (-1);
-	}
+    if (!var)
+        return (-1);
 
-	len = strlen(var);
-	for (i = 0; environ[i]; i++)
-	{
-		if (strncmp(environ[i], var, len) == 0 && environ[i][len] == '=')
-		{
-			free(environ[i]);
+    len = strlen(var);
 
-			for (j = i; environ[j]; j++)
-				environ[j] = environ[j + 1];
-			return (0);
-		}
-	}
-	return (0);
+    for (i = 0; environ[i]; i++)
+    {
+        if (strncmp(environ[i], var, len) == 0 && environ[i][len] == '=')
+        {
+            free(environ[i]);
+            for (j = i; environ[j]; j++)
+                environ[j] = environ[j + 1];
+            return (0);
+        }
+    }
+    return (0);
 }
 
 /**
@@ -89,19 +83,20 @@ int _unsetenv(const char *var)
  */
 int builtin_setenv(char **args)
 {
-	if (!args[1] || !args[2])
-	{
-		write(2, "Usage: setenv VARIABLE VALUE\n", 29);
-		return (1);
-	}
+    if (!args[1] || !args[2])
+    {
+        write(2, "Usage: setenv VARIABLE VALUE\n", 29);
+        return (1);
+    }
 
-	if (_setenv(args[1], args[2]) == -1)
-	{
-		write(2, "setenv: failed\n", 15);
-		return (1);
-	}
-	return (0);
+    if (_setenv(args[1], args[2]) == -1)
+    {
+        write(2, "setenv: failed\n", 15);
+        return (1);
+    }
+    return (0);
 }
+
 
 /**
  * builtin_unsetenv - builtin handler for unsetenv command
@@ -111,15 +106,17 @@ int builtin_setenv(char **args)
  */
 int builtin_unsetenv(char **args)
 {
-	if (!args[1])
-	{
-		write(2, "Usage: unsetenv VARIABLE\n", 26);
-		return (1);
-	}
-	if (_unsetenv(args[1]) == -1)
-	{
-		write(2, "unsetenv: failed\n", 17);
-		return (1);
-	}
-	return (0);
+    if (!args[1])
+    {
+        write(2, "Usage: unsetenv VARIABLE\n", 26);
+        return (1);
+    }
+
+    if (_unsetenv(args[1]) == -1)
+    {
+        write(2, "unsetenv: failed\n", 17);
+        return (1);
+    }
+
+    return (0);
 }
