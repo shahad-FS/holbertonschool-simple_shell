@@ -25,7 +25,7 @@ int _setenv(const char *var, const char *value)
 		return (-1);
 	}
 
-	sprintf(new_var, "%s=%s", var, value);
+	snprintf(new_var, len + strlen(value) + 2, "%s=%s", var, value);
 
 	for (i = 0; environ[i]; i++)
 	{
