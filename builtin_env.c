@@ -66,7 +66,6 @@ int _unsetenv(const char *var)
     {
         if (strncmp(environ[i], var, len) == 0 && environ[i][len] == '=')
         {
-            free(environ[i]);
             for (j = i; environ[j]; j++)
                 environ[j] = environ[j + 1];
             return (0);
