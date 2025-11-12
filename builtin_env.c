@@ -96,7 +96,7 @@ int builtin_setenv(char **args)
 
 	if (_setenv(args[1], args[2]) == -1)
 	{
-		write(2, "setenv: faild\n", 15);
+		write(2, "setenv: failed\n", 15);
 		return (1);
 	}
 	return (0);
